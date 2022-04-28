@@ -1,6 +1,7 @@
 package com.banking.controller;
 
 import com.banking.models.clientProfile;
+import com.banking.models.loanApplication;
 import com.banking.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,8 @@ public class banking {
     private clientProfileRegistrationService service;
     @Autowired
     clientProfileService account;
+    @Autowired
+    loanApplicationService applicationFactory;
 
 
 
@@ -239,10 +242,49 @@ public class banking {
 
         else {System.out.println("something is wrong");}
 
+    }
 
+    @RequestMapping(value="/loanApplication", method = RequestMethod.POST)
+    public void submitLoanApp
+            (HttpServletRequest req, HttpServletResponse res,
+             @RequestParam(value="fname") String fname,
+             @RequestParam(value="minit") String midInitial,
+             @RequestParam(value="lname") String lname,
+             @RequestParam(value="dob") String dob,
+             @RequestParam(value="email") String email,
+             @RequestParam(value="maritalStatus") String maritalStatus,
+             @RequestParam(value="city") String city,
+             @RequestParam(value="state") String state,
+             @RequestParam(value="zip") String zip,
+             @RequestParam(value="ssNum") String ssNum,
+             @RequestParam(value="phone") String phone,
+             @RequestParam(value="loanAmount") int amount,
+             @RequestParam(value="loanPurpose") String purpose,
+             @RequestParam(value="salary") int salary,
+             @RequestParam(value="decision") String decision,
+             @RequestParam(value="status") String status
+            ) throws IOException {
 
+            loanApplication loan = new loanApplication();
 
+            loan.setFname(fname);
+            loan.setMidInitial(midInitial);
+            loan.setLname(lname);
+            loan.setDOB(dob);
+            loan.setEmail(email);
+            loan.setMaritalStatus(maritalStatus);
+            loan.setCity(city);
+            loan.setState(state);
+            loan.setZip(zip);
+            loan.setSsNum(ssNum);
+            loan.setPhone(phone);
+            loan.setLoanAmount(amount);
+            loan.setLoanPurpose(purpose);
+            loan.setSalary(salary);
+            loan.setDescription(decision);
+            loan.setStatus(status);
 
+            applicationFactory.submitLoanApp(loan);
 
 
 
