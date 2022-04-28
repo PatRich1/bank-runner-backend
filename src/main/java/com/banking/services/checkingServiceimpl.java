@@ -36,8 +36,8 @@ public class checkingServiceimpl implements checkingService {
     }
 
     @Override
-    public checkingAccountInfo get(int id) {
-        return checking.findById(id).get();
+    public checkingAccountInfo get(long id) {
+        return checking.findByChkAccNum(id);
     }
 
     @Override

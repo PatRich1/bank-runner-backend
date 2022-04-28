@@ -40,8 +40,8 @@ public class savingsAccServiceimpl implements savingsAccService{
     }
 
     @Override
-    public savingsAccountInfo get(int id) {
-        return service.findById(id).get();
+    public savingsAccountInfo get(long id) {
+        return service.findBySavAccNum(id);
     }
 
     @Override

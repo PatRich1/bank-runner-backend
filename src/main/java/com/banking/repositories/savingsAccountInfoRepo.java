@@ -8,8 +8,7 @@ import java.util.List;
 
 @Repository
 public interface savingsAccountInfoRepo extends JpaRepository<savingsAccountInfo,Integer> {
-    @Override
-    savingsAccountInfo getById(Integer integer);
+    savingsAccountInfo findBySavAccNum(long id);
 
     @Override
     List<savingsAccountInfo> findAll();

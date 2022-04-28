@@ -27,8 +27,8 @@ public class checkingAccountController {
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
-    @GetMapping("/findbyid/{dummy_PK}")
-    public ResponseEntity<checkingAccountInfo> findbyid(@PathVariable("dummy_PK") int id){
+    @GetMapping("/findbyid/{chk_acc_num}")
+    public ResponseEntity<checkingAccountInfo> findbyid(@PathVariable("chk_acc_num") long id){
         checkingAccountInfo accounts = checking.get(id);
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
