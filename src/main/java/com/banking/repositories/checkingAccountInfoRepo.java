@@ -9,11 +9,12 @@ import java.util.List;
 @Repository
 public interface checkingAccountInfoRepo extends JpaRepository<checkingAccountInfo,Integer> {
 
-    @Override
-    checkingAccountInfo getById(Integer integer);
+    checkingAccountInfo findByChkAccNum(long id);
 
     @Override
     List<checkingAccountInfo> findAll();
 
     List<checkingAccountInfo> findByClientId(int id);
+
+
 }

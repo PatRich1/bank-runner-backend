@@ -10,7 +10,7 @@ public interface savingsAccService{
     public savingsAccountInfo create (savingsAccountInfo saving);
     List<savingsAccountInfo> findall();
     List<savingsAccountInfo> findallbyid(int id);
-    savingsAccountInfo get(int id);
+    savingsAccountInfo get(long id);
     savingsAccountInfo update(savingsAccountInfo saving);
     void delete (int id);
 }
