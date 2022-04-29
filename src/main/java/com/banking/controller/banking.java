@@ -34,6 +34,8 @@ public class banking {
     loanApplicationService applicationFactory;
     @Autowired
     managerCredentialsRepo managerFactory;
+    @Autowired
+    loanApplicationRepo  loanAppRepo;
 
 
 
@@ -258,6 +260,7 @@ public class banking {
              @RequestParam(value="dob") String dob,
              @RequestParam(value="email") String email,
              @RequestParam(value="maritalStatus") String maritalStatus,
+             @RequestParam(value="street") String street,
              @RequestParam(value="city") String city,
              @RequestParam(value="state") String state,
              @RequestParam(value="zip") String zip,
@@ -278,6 +281,7 @@ public class banking {
             loan.setDOB(dob);
             loan.setEmail(email);
             loan.setMaritalStatus(maritalStatus);
+            loan.setStreet(street);
             loan.setCity(city);
             loan.setState(state);
             loan.setZip(zip);
@@ -343,6 +347,27 @@ public class banking {
 
         ArrayList<loanApplication> allLoans = applicationFactory.findAll();
         return allLoans;
+
+
+    }
+
+    @RequestMapping(value="/loanUpdate",method=RequestMethod.PUT)
+    public void loanDecision(HttpServletRequest req, HttpServletResponse res,
+                             @RequestParam(value="appId") int appId,
+                             @RequestParam(value="status") String status,
+                            @RequestParam(value="description") String description){
+
+        Optional<loanApplication> applicant = loanAppRepo.findById(appId);
+        if(applicant.isPresent()) {
+            loanApplication loan = applicant.get();
+
+            loan.setApp_id(appId);
+            loan.setStatus(status);
+            loan.setDescription(description);
+
+            applicationFactory.updateLoanApp(loan);
+
+        }
 
 
     }

@@ -24,5 +24,11 @@ public class loanApplicationService {
         return (ArrayList<loanApplication>) applicationFactory.findAll();
     }
 
+    public void updateLoanApp(loanApplication app) {
+
+        applicationFactory.save(app);
+
+    }
+
 
     }
