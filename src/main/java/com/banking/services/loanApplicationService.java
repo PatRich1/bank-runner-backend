@@ -7,6 +7,8 @@ import com.banking.repositories.loanApplicationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class loanApplicationService {
     @Autowired
@@ -16,6 +18,10 @@ public class loanApplicationService {
 
         applicationFactory.save(app);
 
+    }
+    public ArrayList<loanApplication> findAll() {
+
+        return (ArrayList<loanApplication>) applicationFactory.findAll();
     }
 
 
