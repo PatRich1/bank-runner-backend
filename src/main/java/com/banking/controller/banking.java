@@ -2,6 +2,9 @@ package com.banking.controller;
 
 import com.banking.models.clientProfile;
 import com.banking.models.loanApplication;
+import com.banking.models.managerCredentials;
+import com.banking.repositories.loanApplicationRepo;
+import com.banking.repositories.managerCredentialsRepo;
 import com.banking.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +32,10 @@ public class banking {
     clientProfileService account;
     @Autowired
     loanApplicationService applicationFactory;
+    @Autowired
+    managerCredentialsRepo managerFactory;
+    @Autowired
+    loanApplicationRepo  loanAppRepo;
 
 
 
@@ -253,6 +260,7 @@ public class banking {
              @RequestParam(value="dob") String dob,
              @RequestParam(value="email") String email,
              @RequestParam(value="maritalStatus") String maritalStatus,
+             @RequestParam(value="street") String street,
              @RequestParam(value="city") String city,
              @RequestParam(value="state") String state,
              @RequestParam(value="zip") String zip,
@@ -273,6 +281,7 @@ public class banking {
             loan.setDOB(dob);
             loan.setEmail(email);
             loan.setMaritalStatus(maritalStatus);
+            loan.setStreet(street);
             loan.setCity(city);
             loan.setState(state);
             loan.setZip(zip);
@@ -291,6 +300,80 @@ public class banking {
 
     }
 
+    @RequestMapping(value="/managerLogin", method = RequestMethod.POST)
+    public @ResponseBody managerCredentials managerLogin(HttpServletRequest req, HttpServletResponse res,
+                           @RequestParam(value="uname") String uname,
+                           @RequestParam(value="pass") String pass) throws IOException {
+
+                Optional<managerCredentials> result = managerFactory.findByUsernameAndPassword(uname,pass);
+                managerCredentials manager = null;
+
+
+                if(result.isPresent()) {
+                    manager = result.get();
+                    Cookie managerLogin = new Cookie("managerLogin","yes");
+                    res.addCookie(managerLogin);
+                    Cookie error = new Cookie("error","no");
+                    res.addCookie(error);
+
+                    Cookie managerName = new Cookie("uname",manager.getUname());
+                    Cookie fname = new Cookie("fname",manager.getFname());
+                    Cookie lname = new Cookie("lname",manager.getLname());
+                    res.addCookie(managerName);
+                    res.addCookie(fname);
+                    res.addCookie(lname);
+
+
+
+
+
+
+
+
+
+                }
+                else {
+
+                    Cookie managerLogin = new Cookie("managerLogin","no");
+                    res.addCookie(managerLogin);
+                    Cookie error = new Cookie("error","yes");
+                    res.addCookie(error);
+                }
+                return manager;
+
+    }
+    @RequestMapping(value="/loanFind",method = RequestMethod.GET)
+    public @ResponseBody ArrayList<loanApplication> loanRetrieve(){
+
+        ArrayList<loanApplication> allLoans = applicationFactory.findAll();
+        return allLoans;
+
+
+    }
+
+    @RequestMapping(value="/loanUpdate",method=RequestMethod.PUT)
+    public void loanDecision(HttpServletRequest req, HttpServletResponse res,
+                             @RequestParam(value="appId") int appId,
+                             @RequestParam(value="status") String status,
+                            @RequestParam(value="description") String description){
+
+        Optional<loanApplication> applicant = loanAppRepo.findById(appId);
+        if(applicant.isPresent()) {
+            loanApplication loan = applicant.get();
+
+            loan.setApp_id(appId);
+            loan.setStatus(status);
+            loan.setDescription(description);
+
+            applicationFactory.updateLoanApp(loan);
+
+        }
+
+
+    }
+
+
+    }
 
 
 
@@ -303,4 +386,4 @@ public class banking {
 
 
 
-}
+
