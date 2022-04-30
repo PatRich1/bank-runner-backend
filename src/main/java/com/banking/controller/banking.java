@@ -124,6 +124,7 @@ public class banking {
             res.addCookie(ID);
 
             res.addHeader("Access-Control-Allow-Origin","*");
+            res.addHeader("Access-Control-Allow-Credentials","true");
 
         }
     }
