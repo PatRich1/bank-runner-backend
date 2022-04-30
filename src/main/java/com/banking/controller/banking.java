@@ -3,10 +3,13 @@ package com.banking.controller;
 import com.banking.models.clientProfile;
 import com.banking.models.loanApplication;
 import com.banking.models.managerCredentials;
+import com.banking.models.notifications;
 import com.banking.repositories.loanApplicationRepo;
 import com.banking.repositories.managerCredentialsRepo;
 import com.banking.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -379,6 +382,12 @@ public class banking {
         }
 
 
+    }
+
+    @GetMapping("/findbyemail/{email}")
+    public ResponseEntity<clientProfile> findbyemail(@PathVariable("email") String email){
+        clientProfile profile = account.findbyemail(email);
+        return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
 
