@@ -19,7 +19,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins="")
 public class banking {
+
+
+
     @Autowired
     private transactionHistoryService transactionHistoryService;
     @Autowired
