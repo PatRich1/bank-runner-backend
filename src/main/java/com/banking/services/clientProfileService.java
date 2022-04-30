@@ -1,5 +1,6 @@
 package com.banking.services;
 
+import com.banking.exception.UserNotFoundException;
 import com.banking.models.clientProfile;
 import com.banking.repositories.clientProfileRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,10 @@ public class clientProfileService  {
 
         return result;
 
+    }
+
+    public clientProfile findbyemail (String email) {
+        return profile.findByEmail(email).orElseThrow(()-> new UserNotFoundException("User by email"+ email +"was not found"));
     }
 
 
