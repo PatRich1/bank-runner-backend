@@ -24,7 +24,7 @@ public class loanApplication {
     @Column(name= "first_name")
     private String fname;
 
-    @NotNull
+
     @Column(name = "initial")
     private String midInitial;
 
