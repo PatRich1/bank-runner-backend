@@ -123,6 +123,8 @@ public class banking {
             Cookie ID = new Cookie("ID", Long.toString(user.getClientId()));
             res.addCookie(ID);
 
+            res.addHeader("Access-Control-Allow-Origin","*");
+
         }
     }
 
