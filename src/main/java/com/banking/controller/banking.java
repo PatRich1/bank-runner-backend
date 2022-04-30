@@ -109,6 +109,7 @@ public class banking {
             clientProfile user = result.get(0);
 
             Cookie loggedIn = new Cookie("loggedIn", "true");
+
             res.addCookie(loggedIn);
 
             Cookie username = new Cookie("username", uname);
@@ -122,6 +123,8 @@ public class banking {
 
             Cookie ID = new Cookie("ID", Long.toString(user.getClientId()));
             res.addCookie(ID);
+
+
 
 
 
