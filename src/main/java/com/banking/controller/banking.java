@@ -17,9 +17,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
-//xyz
+
 @RestController
-@CrossOrigin(origins="http://revature-bank-runner.s3-website-us-east-1.amazonaws.com, http://localhost:4200")
+
 public class banking {
 
 
@@ -123,8 +123,7 @@ public class banking {
             Cookie ID = new Cookie("ID", Long.toString(user.getClientId()));
             res.addCookie(ID);
 
-            res.addHeader("Access-Control-Allow-Origin","*");
-            res.addHeader("Access-Control-Allow-Credentials","true");
+
 
         }
     }
