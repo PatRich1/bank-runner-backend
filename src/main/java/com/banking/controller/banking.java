@@ -93,7 +93,7 @@ public class banking {
     }
 
 
-
+    @CrossOrigin(origins="http://revature-bank-runner.s3-website-us-east-1.amazonaws.com")
     @RequestMapping(value="/loginCheck", method = RequestMethod.POST)
     public void loginCheck(HttpServletRequest req, HttpServletResponse res,
              @RequestParam(value="uname") String uname,
