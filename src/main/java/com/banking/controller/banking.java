@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Optional;
 //xyz
 @RestController
-@CrossOrigin(origins="*")
+@CrossOrigin(origins="http://revature-bank-runner.s3-website-us-east-1.amazonaws.com, http://localhost:4200")
 public class banking {
 
 
