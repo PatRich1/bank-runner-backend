@@ -390,6 +390,11 @@ public class banking {
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
+    @GetMapping("/findbyCid/{Client_ID}")
+    public ResponseEntity<clientProfile> findbyemail(@PathVariable("Client_ID") int id){
+        clientProfile profile = account.findByClientId(id);
+        return new ResponseEntity<>(profile, HttpStatus.OK);
+    }
 
     }
 

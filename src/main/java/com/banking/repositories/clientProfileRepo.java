@@ -23,5 +23,7 @@ public interface clientProfileRepo extends JpaRepository<clientProfile, Integer>
     @Query
     Optional<clientProfile> findByEmail(String email);
 
+    Optional<clientProfile> findByClientId(int id);
+
 
 }

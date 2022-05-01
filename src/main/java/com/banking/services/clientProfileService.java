@@ -63,6 +63,10 @@ public class clientProfileService  {
         return profile.findByEmail(email).orElseThrow(()-> new UserNotFoundException("User by email"+ email +"was not found"));
     }
 
+    public clientProfile findByClientId(int id){
+        return profile.findByClientId(id).orElseThrow(()-> new UserNotFoundException("User by id"+ id +"was not found"));
+    }
+
 
 
 
