@@ -127,9 +127,6 @@ public class banking {
             Cookie ID = new Cookie("ID", Long.toString(user.getClientId()));
             res.addCookie(ID);
 
-            res.addHeader("Access-Control-Allow-Origin","http://revature-bank-runner.s3-website-us-east-1.amazonaws.com");
-            res.addHeader("Access-Control-Allow-Credentials","true");
-            res.addHeader("Access-Control-Allow-Methods","*");
 
 
 
