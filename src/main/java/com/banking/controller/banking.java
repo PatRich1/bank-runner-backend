@@ -151,12 +151,12 @@ public class banking {
              @RequestParam(value="uname") String uname,
              @RequestParam(value="pass") String pass,
              @RequestParam(value="passConfirm") String passConfirm,
-             @RequestParam(value="ID") int ID
+             @RequestParam(value="ID") String ID
             ) throws IOException {
 
 
         clientProfile profile = new clientProfile();
-        profile.setClientId(ID);
+        profile.setClientId(Integer.parseInt(ID));
         profile.setFname(fname);
         profile.setMiddleInit(midInitial);
         profile.setLname(lname);
