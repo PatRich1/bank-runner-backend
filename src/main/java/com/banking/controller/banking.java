@@ -187,27 +187,22 @@ public class banking {
     }
 
     @RequestMapping(value="/verifyEmail")
-    public clientProfile verifyEmail(@RequestParam(value="email") String email, HttpServletRequest req, HttpServletResponse res){
+    public @ResponseBody clientProfile verifyEmail(@RequestParam(value="email") String email, HttpServletRequest req, HttpServletResponse res){
 
         Optional<clientProfile> result = account.emailCheck(email);
-        System.out.println(result);
+
         clientProfile resultSend = null;
 
         if(result.isPresent()) {
             resultSend = result.get();
 
-            Cookie verified = new Cookie("verified","true");
-            res.addCookie(verified);
-            Cookie ID = new Cookie("ID",Long.toString(resultSend.getClientId()));
-            res.addCookie(ID);
-            System.out.println("success");
+
+
 
         }
         else {
-            Cookie verified = new Cookie("verified","false");
 
-            res.addCookie(verified);
-            System.out.println("fail");
+
 
         }
 
@@ -300,17 +295,7 @@ public class banking {
 
                 if(result.isPresent()) {
                     manager = result.get();
-                    Cookie managerLogin = new Cookie("managerLogin","yes");
-                    res.addCookie(managerLogin);
-                    Cookie error = new Cookie("error","no");
-                    res.addCookie(error);
 
-                    Cookie managerName = new Cookie("uname",manager.getUname());
-                    Cookie fname = new Cookie("fname",manager.getFname());
-                    Cookie lname = new Cookie("lname",manager.getLname());
-                    res.addCookie(managerName);
-                    res.addCookie(fname);
-                    res.addCookie(lname);
 
 
 
@@ -323,10 +308,7 @@ public class banking {
                 }
                 else {
 
-                    Cookie managerLogin = new Cookie("managerLogin","no");
-                    res.addCookie(managerLogin);
-                    Cookie error = new Cookie("error","yes");
-                    res.addCookie(error);
+                    System.out.println("Error");
                 }
                 return manager;
 
