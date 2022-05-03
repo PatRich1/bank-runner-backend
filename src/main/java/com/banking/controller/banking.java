@@ -96,42 +96,19 @@ public class banking {
 
 
     @RequestMapping(value="/loginCheck", method = RequestMethod.POST)
-    public void loginCheck(HttpServletRequest req, HttpServletResponse res,
+    public @ResponseBody clientProfile loginCheck(HttpServletRequest req, HttpServletResponse res,
              @RequestParam(value="uname") String uname,
              @RequestParam(value="pass") String pass) throws IOException {
 
 
         ArrayList<clientProfile> result = account.loginCheck(uname, pass);
+        clientProfile user = null;
 
 
         if (result.isEmpty()) {
             System.out.println("no matching creds");
-        } else {
-            clientProfile user = result.get(0);
-
-            Cookie loggedIn = new Cookie("loggedIn", "true");
-
-            res.addCookie(loggedIn);
-
-            Cookie username = new Cookie("username", uname);
-            res.addCookie(username);
-
-            Cookie firstName = new Cookie("firstName", user.getFname());
-            res.addCookie(firstName);
-
-            Cookie lastName = new Cookie("lastName", user.getLname());
-            res.addCookie(lastName);
-
-            Cookie ID = new Cookie("ID", Long.toString(user.getClientId()));
-            res.addCookie(ID);
-
-
-
-
-
-
-
-        }
+        } else { user = result.get(0);}
+        return user;
     }
 
 
