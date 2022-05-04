@@ -36,7 +36,7 @@ public class banking {
     loanApplicationRepo  loanAppRepo;
 
     @RequestMapping(value="/registerNewAccount", method = RequestMethod.POST)
-    public void createNewAccount
+    public ResponseEntity<User> createNewAccount
             (HttpServletRequest req, HttpServletResponse res,
              @RequestParam(value="fname") String fname,
              @RequestParam(value="midInitial") String midInitial,
@@ -68,7 +68,7 @@ public class banking {
         profile.setSsNum(ssNum);
         profile.setUname(uname);
         profile.setPass(pass);
-        profile.setRole(UserRole.valueOf(role));
+        profile.setRole(role);
         System.out.println(profile);
 
         ArrayList<User> userCheck = clientProfileService.existingClientCheck(ssNum);
@@ -76,12 +76,15 @@ public class banking {
         if(pass.equals(passConfirm) && userCheck.isEmpty())
         {
             clientProfileService.addNewAccount(profile);
+            return ResponseEntity.ok(profile);
         }
-        else if (!pass.equals(passConfirm))  {System.out.println("passwords don't match");}
+        else if (!pass.equals(passConfirm))  {ResponseEntity.badRequest().build();}
 
-        else if(userCheck.size() == 1) {System.out.println("client is already in system");}
+        else if(userCheck.size() == 1) {ResponseEntity.badRequest().build();}
 
-        else {System.out.println("Something went wrong");}
+        else { return  ResponseEntity.badRequest().build();}
+
+        return ResponseEntity.ok(profile);
 
     }
 

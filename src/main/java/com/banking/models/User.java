@@ -61,5 +61,5 @@ public class User {
 
     @NotNull
     @Column(name = "role")
-    private UserRole role;
+    private String role;
 }
