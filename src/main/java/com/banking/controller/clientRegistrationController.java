@@ -1,6 +1,6 @@
 package com.banking.controller;
 
-import com.banking.models.clientProfile;
+import com.banking.models.User;
 import com.banking.services.clientProfileRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,10 +12,10 @@ public class clientRegistrationController {
     @Autowired
     private clientProfileRegistrationService service;
     @PostMapping("/login")
-    public clientProfile loginUser(@RequestBody clientProfile clientProfile) throws Exception {
-        String tempEmail=clientProfile.getEmail();
-        String tempPass=clientProfile.getPass();
-        clientProfile clientObject = null;
+    public User loginUser(@RequestBody User User) throws Exception {
+        String tempEmail= User.getEmail();
+        String tempPass= User.getPass();
+        User clientObject = null;
         if(tempEmail != null && tempPass != null){
             clientObject = service.fetchClientByEmailAndPassword(tempEmail,tempPass);
 

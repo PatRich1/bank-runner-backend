@@ -1,6 +1,6 @@
 package com.banking.services;
 
-import com.banking.models.clientProfile;
+import com.banking.models.User;
 import com.banking.repositories.clientRegistrationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ public class clientProfileRegistrationService {
 
 
 
-    public clientProfile fetchClientByEmailAndPassword(String tempEmail, String tempPass) {
+    public User fetchClientByEmailAndPassword(String tempEmail, String tempPass) {
         return repo.findByEmailAndPass(tempEmail,tempPass);
     }
 }
