@@ -1,17 +1,23 @@
 package com.banking.controller;
 
 import com.banking.models.User;
-import com.banking.models.UserRole;
+
 import com.banking.models.loanApplication;
+
+
 import com.banking.repositories.loanApplicationRepo;
+
 import com.banking.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -27,16 +33,19 @@ public class banking {
     @Autowired
     private savingsAccServiceimpl savingsAccServiceimpl;
     @Autowired
-    private clientProfileRegistrationService registrationService;
+    private clientProfileRegistrationService service;
     @Autowired
-    clientProfileService clientProfileService;
+    clientProfileService account;
     @Autowired
     loanApplicationService applicationFactory;
+
     @Autowired
     loanApplicationRepo  loanAppRepo;
 
+
+
     @RequestMapping(value="/registerNewAccount", method = RequestMethod.POST)
-    public ResponseEntity<User> createNewAccount
+    public void createNewAccount
             (HttpServletRequest req, HttpServletResponse res,
              @RequestParam(value="fname") String fname,
              @RequestParam(value="midInitial") String midInitial,
@@ -71,48 +80,48 @@ public class banking {
         profile.setRole(role);
         System.out.println(profile);
 
-        ArrayList<User> userCheck = clientProfileService.existingClientCheck(ssNum);
+        ArrayList<User> userCheck = account.existingClientCheck(ssNum);
+
 
         if(pass.equals(passConfirm) && userCheck.isEmpty())
         {
-            clientProfileService.addNewAccount(profile);
-            return ResponseEntity.ok(profile);
+            account.addNewAccount(profile);
         }
-        else if (!pass.equals(passConfirm))  {ResponseEntity.badRequest().build();}
+        else if (!pass.equals(passConfirm))  {System.out.println("passwords don't match");}
 
-        else if(userCheck.size() == 1) {ResponseEntity.badRequest().build();}
+        else if(userCheck.size() == 1) {System.out.println("client is already in system");}
 
-        else { return  ResponseEntity.badRequest().build();}
-
-        return ResponseEntity.ok(profile);
+        else {System.out.println("Something went wrong");}
 
     }
 
+
+
     @RequestMapping(value="/loginCheck", method = RequestMethod.POST)
-    public ResponseEntity<User> loginCheck(HttpServletRequest req, HttpServletResponse res,
-                                         @RequestParam(value="uname") String uname,
-                                         @RequestParam(value="pass") String pass) throws IOException {
+    public @ResponseBody User loginCheck(HttpServletRequest req, HttpServletResponse res,
+             @RequestParam(value="uname") String uname,
+             @RequestParam(value="pass") String pass) throws IOException {
 
 
-        ArrayList<User> result = clientProfileService.loginCheck(uname, pass);
+        ArrayList<User> result = account.loginCheck(uname, pass);
         User user = null;
 
 
         if (result.isEmpty()) {
-            return ResponseEntity.badRequest().build(); // Send back 400
+            System.out.println("no matching creds");
         } else { user = result.get(0);}
-        return ResponseEntity.ok(user); // Send status code 200
+        return user;
     }
 
 
         @RequestMapping(value="/myProfilePage", method = RequestMethod.POST)
         public @ResponseBody User renderProfileDetails(HttpServletRequest req, HttpServletResponse res,
-                                                       @RequestParam(value="ID") int clientID){
+                        @RequestParam(value="ID") int clientID){
 
             System.out.println("we made the connection on init");
             User clientInfo = null;
 
-            Optional<User> result = clientProfileService.profileInfoRetrieve(clientID);
+            Optional<User> result = account.profileInfoRetrieve(clientID);
 
             if (result.isPresent()) { clientInfo = result.get();}
 
@@ -143,7 +152,7 @@ public class banking {
              @RequestParam(value="ssNum") String ssNum,
              @RequestParam(value="uname") String uname,
              @RequestParam(value="pass") String pass,
-             @RequestParam(value="passConfirm") String passConfirm,
+             @RequestParam(value="role") String role,
              @RequestParam(value="ID") String ID
             ) throws IOException {
 
@@ -162,27 +171,27 @@ public class banking {
         profile.setSsNum(ssNum);
         profile.setUname(uname);
         profile.setPass(pass);
+        profile.setRole(role);
         System.out.println(profile);
 
 
 
 
-        if(Objects.equals(pass, passConfirm))
-        {
-        clientProfileService.addNewAccount(profile);
-        }
-        else if (!pass.equals(passConfirm))  {System.out.println("passwords don't match");}
+
+        account.addNewAccount(profile);
 
 
 
-        else {System.out.println("Something went wrong");}
+
+
+
 
     }
 
     @RequestMapping(value="/verifyEmail")
     public @ResponseBody User verifyEmail(@RequestParam(value="email") String email, HttpServletRequest req, HttpServletResponse res){
 
-        Optional<User> result = clientProfileService.emailCheck(email);
+        Optional<User> result = account.emailCheck(email);
 
         User resultSend = null;
 
@@ -209,9 +218,9 @@ public class banking {
                                    @RequestParam(value="ID") String ID,
                                    HttpServletRequest req, HttpServletResponse res){
 
-        User newPasswordChange = null;
+            User newPasswordChange = null;
 
-        Optional<User> result = clientProfileService.profileInfoRetrieve(Integer.parseInt(ID));
+        Optional<User> result = account.profileInfoRetrieve(Integer.parseInt(ID));
 
         if(result.isPresent())
         { newPasswordChange = result.get();
@@ -221,8 +230,7 @@ public class banking {
 
 
         if(Objects.equals(pass, passConfirm))
-        {
-            clientProfileService.addNewAccount(newPasswordChange);
+        {account.addNewAccount(newPasswordChange);
             System.out.println("on the right track");}
 
         else {System.out.println("something is wrong");}
@@ -278,6 +286,7 @@ public class banking {
 
     }
 
+
     @RequestMapping(value="/loanFind",method = RequestMethod.GET)
     public @ResponseBody ArrayList<loanApplication> loanRetrieve(){
 
@@ -310,14 +319,27 @@ public class banking {
 
     @GetMapping("/findbyemail/{email}")
     public ResponseEntity<User> findbyemail(@PathVariable("email") String email){
-        User profile = clientProfileService.findbyemail(email);
+        User profile = account.findbyemail(email);
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
     @GetMapping("/findbyCid/{Client_ID}")
     public ResponseEntity<User> findbyemail(@PathVariable("Client_ID") int id){
-        User profile = clientProfileService.findById(id);
+        User profile = account.findByClientId(id);
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
-}
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
