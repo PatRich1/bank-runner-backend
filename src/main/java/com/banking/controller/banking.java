@@ -26,14 +26,12 @@ import java.util.Optional;
 @RestController
 public class banking {
 
-    @Autowired
-    private transactionHistoryService transactionHistoryService;
+
     @Autowired
     private checkingService checkingAccService;
     @Autowired
     private savingsAccServiceimpl savingsAccServiceimpl;
-    @Autowired
-    private clientProfileRegistrationService service;
+
     @Autowired
     clientProfileService account;
     @Autowired
