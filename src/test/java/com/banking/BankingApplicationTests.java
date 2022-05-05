@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class BankingApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void contextLoads() throws UnsupportedOperationException {//this is a default
 	}
 
 }

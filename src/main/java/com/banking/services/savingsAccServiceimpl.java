@@ -1,15 +1,9 @@
 package com.banking.services;
-
-
-import com.banking.models.checkingAccountInfo;
 import com.banking.models.savingsAccountInfo;
 import com.banking.repositories.savingsAccountInfoRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.*;
-
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.List;
 
 @Service

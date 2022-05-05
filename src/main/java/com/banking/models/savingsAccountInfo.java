@@ -4,11 +4,11 @@ package com.banking.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.*;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Objects;
+
 
 @Entity
 @Table(name="SAVINGS_ACCTS")

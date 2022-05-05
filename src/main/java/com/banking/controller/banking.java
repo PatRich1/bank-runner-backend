@@ -27,10 +27,7 @@ import java.util.Optional;
 public class banking {
 
 
-    @Autowired
-    private checkingService checkingAccService;
-    @Autowired
-    private savingsAccServiceimpl savingsAccServiceimpl;
+
 
     @Autowired
     clientProfileService account;
@@ -281,8 +278,8 @@ public class banking {
     @GetMapping(value="/loanFind")
     public @ResponseBody ArrayList<loanApplication> loanRetrieve(){
 
-        ArrayList<loanApplication> allLoans = applicationFactory.findAll();
-        return allLoans;
+        return applicationFactory.findAll();
+
 
 
     }
