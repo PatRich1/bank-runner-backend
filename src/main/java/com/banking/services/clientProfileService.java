@@ -1,14 +1,9 @@
 package com.banking.services;
-
 import com.banking.exception.UserNotFoundException;
-
 import com.banking.models.User;
 import com.banking.repositories.clientProfileRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -32,9 +27,9 @@ public class clientProfileService  {
         return userCheck;
     }
 
-    public ArrayList<User> loginCheck(String uname, String pass) {
+    public Optional<User> loginCheck(String uname, String pass) {
 
-        ArrayList<User> result;
+        Optional<User> result;
 
         result = profile.findByCreds(uname,pass);
 

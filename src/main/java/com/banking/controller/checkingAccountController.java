@@ -53,9 +53,5 @@ public class checkingAccountController {
         return new ResponseEntity<>(updateAccount, HttpStatus.OK);
     }
 
-    @DeleteMapping ("/delete/{dummy_PK}")
-    public ResponseEntity<?> delete(@PathVariable("dummy_PK") int id){
-        checking.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+
 }

@@ -44,7 +44,7 @@ public class banking {
 
 
 
-    @RequestMapping(value="/registerNewAccount", method = RequestMethod.POST)
+    @PostMapping(value="/registerNewAccount")
     public void createNewAccount
             (HttpServletRequest req, HttpServletResponse res,
              @RequestParam(value="fname") String fname,
@@ -78,7 +78,7 @@ public class banking {
         profile.setUname(uname);
         profile.setPass(pass);
         profile.setRole(role);
-        System.out.println(profile);
+
 
         ArrayList<User> userCheck = account.existingClientCheck(ssNum);
 
@@ -87,45 +87,42 @@ public class banking {
         {
             account.addNewAccount(profile);
         }
-        else if (!pass.equals(passConfirm))  {System.out.println("passwords don't match");}
 
-        else if(userCheck.size() == 1) {System.out.println("client is already in system");}
-
-        else {System.out.println("Something went wrong");}
 
     }
 
 
 
-    @RequestMapping(value="/loginCheck", method = RequestMethod.POST)
+    @PostMapping(value="/loginCheck")
     public @ResponseBody User loginCheck(HttpServletRequest req, HttpServletResponse res,
              @RequestParam(value="uname") String uname,
-             @RequestParam(value="pass") String pass) throws IOException {
+             @RequestParam(value="pass") String pass)  {
 
 
-        ArrayList<User> result = account.loginCheck(uname, pass);
-        User user = null;
+        Optional<User> result = account.loginCheck(uname, pass);
+        User check = null;
 
 
-        if (result.isEmpty()) {
-            System.out.println("no matching creds");
-        } else { user = result.get(0);}
-        return user;
+        if(result.isPresent()) {check = result.get();}
+        return check;
+
+
+
     }
 
 
-        @RequestMapping(value="/myProfilePage", method = RequestMethod.POST)
+        @PostMapping(value="/myProfilePage")
         public @ResponseBody User renderProfileDetails(HttpServletRequest req, HttpServletResponse res,
                         @RequestParam(value="ID") int clientID){
 
-            System.out.println("we made the connection on init");
+
             User clientInfo = null;
 
             Optional<User> result = account.profileInfoRetrieve(clientID);
 
             if (result.isPresent()) { clientInfo = result.get();}
 
-            else {System.out.println("Error retrieving current user's information");}
+
             
             return clientInfo;
 
@@ -153,12 +150,12 @@ public class banking {
              @RequestParam(value="uname") String uname,
              @RequestParam(value="pass") String pass,
              @RequestParam(value="role") String role,
-             @RequestParam(value="ID") String ID
-            ) throws IOException {
+             @RequestParam(value="ID") String id
+            )  {
 
 
         User profile = new User();
-        profile.setId(Integer.parseInt(ID));
+        profile.setId(Integer.parseInt(id));
         profile.setFname(fname);
         profile.setMiddleInit(midInitial);
         profile.setLname(lname);
@@ -172,7 +169,7 @@ public class banking {
         profile.setUname(uname);
         profile.setPass(pass);
         profile.setRole(role);
-        System.out.println(profile);
+
 
 
 
@@ -202,11 +199,7 @@ public class banking {
 
 
         }
-        else {
 
-
-
-        }
 
         return resultSend;
 
@@ -231,13 +224,13 @@ public class banking {
 
         if(Objects.equals(pass, passConfirm))
         {account.addNewAccount(newPasswordChange);
-            System.out.println("on the right track");}
+            }
 
-        else {System.out.println("something is wrong");}
+
 
     }
 
-    @RequestMapping(value="/loanApplication", method = RequestMethod.POST)
+    @PostMapping(value="/loanApplication")
     public void submitLoanApp
             (HttpServletRequest req, HttpServletResponse res,
              @RequestParam(value="fname") String fname,
@@ -257,7 +250,7 @@ public class banking {
              @RequestParam(value="salary") int salary,
              @RequestParam(value="decision") String decision,
              @RequestParam(value="status") String status
-            ) throws IOException {
+            )  {
 
             loanApplication loan = new loanApplication();
 
@@ -287,7 +280,7 @@ public class banking {
     }
 
 
-    @RequestMapping(value="/loanFind",method = RequestMethod.GET)
+    @GetMapping(value="/loanFind")
     public @ResponseBody ArrayList<loanApplication> loanRetrieve(){
 
         ArrayList<loanApplication> allLoans = applicationFactory.findAll();
@@ -296,7 +289,7 @@ public class banking {
 
     }
 
-    @RequestMapping(value="/loanUpdate",method=RequestMethod.PUT)
+    @PutMapping(value="/loanUpdate")
     public void loanDecision(HttpServletRequest req, HttpServletResponse res,
                              @RequestParam(value="appId") int appId,
                              @RequestParam(value="status") String status,

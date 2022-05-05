@@ -1,6 +1,6 @@
 package com.banking.controller;
 
-import com.banking.models.checkingAccountInfo;
+
 import com.banking.models.savingsAccountInfo;
 import com.banking.services.savingsAccServiceimpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +51,5 @@ public class savingAccountController {
         return new ResponseEntity<>(updateAccount, HttpStatus.OK);
     }
 
-    @DeleteMapping ("/delete/{dummy_PK}")
-    public ResponseEntity<?> delete(@PathVariable("dummy_PK") int id){
-        saving.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+
 }
