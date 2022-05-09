@@ -1,9 +1,9 @@
 package com.banking.services;
 
-import com.banking.models.checkingAccountInfo;
+
 import com.banking.models.savingsAccountInfo;
 
-import java.util.Collection;
+
 import java.util.List;
 
 public interface savingsAccService{

@@ -1,7 +1,7 @@
 package com.banking.controller;
 
 import com.banking.models.notifications;
-import com.banking.models.savingsAccountInfo;
+
 import com.banking.services.notificationsServiceimpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/notifications")
@@ -52,9 +52,5 @@ public class notificationController {
         return new ResponseEntity<>(updateNotes, HttpStatus.OK);
     }
 
-    @DeleteMapping ("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") int id){
-        notification.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+
 }

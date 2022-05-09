@@ -1,22 +1,23 @@
 package com.banking.controller;
 
-import com.banking.models.clientProfile;
+import com.banking.models.User;
+
 import com.banking.models.loanApplication;
-import com.banking.models.managerCredentials;
-import com.banking.models.notifications;
+
+
 import com.banking.repositories.loanApplicationRepo;
-import com.banking.repositories.managerCredentialsRepo;
+
 import com.banking.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.servlet.http.Cookie;
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -25,26 +26,20 @@ import java.util.Optional;
 @RestController
 public class banking {
 
-    @Autowired
-    private transactionHistoryService transactionHistoryService;
-    @Autowired
-    private checkingService checkingAccService;
-    @Autowired
-    private savingsAccServiceimpl savingsAccServiceimpl;
-    @Autowired
-    private clientProfileRegistrationService service;
+
+
+
     @Autowired
     clientProfileService account;
     @Autowired
     loanApplicationService applicationFactory;
-    @Autowired
-    managerCredentialsRepo managerFactory;
+
     @Autowired
     loanApplicationRepo  loanAppRepo;
 
 
 
-    @RequestMapping(value="/registerNewAccount", method = RequestMethod.POST)
+    @PostMapping(value="/registerNewAccount")
     public void createNewAccount
             (HttpServletRequest req, HttpServletResponse res,
              @RequestParam(value="fname") String fname,
@@ -59,11 +54,12 @@ public class banking {
              @RequestParam(value="ssNum") String ssNum,
              @RequestParam(value="uname") String uname,
              @RequestParam(value="pass") String pass,
-             @RequestParam(value="passConfirm") String passConfirm
+             @RequestParam(value="passConfirm") String passConfirm,
+             @RequestParam(value="role") String role
              ) throws IOException {
 
 
-        clientProfile profile = new clientProfile();
+        User profile = new User();
         profile.setFname(fname);
         profile.setMiddleInit(midInitial);
         profile.setLname(lname);
@@ -76,54 +72,52 @@ public class banking {
         profile.setSsNum(ssNum);
         profile.setUname(uname);
         profile.setPass(pass);
-        System.out.println(profile);
+        profile.setRole(role);
 
-        ArrayList<clientProfile> userCheck = account.existingClientCheck(ssNum);
+
+        ArrayList<User> userCheck = account.existingClientCheck(ssNum);
 
 
         if(pass.equals(passConfirm) && userCheck.isEmpty())
         {
             account.addNewAccount(profile);
         }
-        else if (!pass.equals(passConfirm))  {System.out.println("passwords don't match");}
 
-        else if(userCheck.size() == 1) {System.out.println("client is already in system");}
-
-        else {System.out.println("Something went wrong");}
 
     }
 
 
 
-    @RequestMapping(value="/loginCheck", method = RequestMethod.POST)
-    public @ResponseBody clientProfile loginCheck(HttpServletRequest req, HttpServletResponse res,
+    @PostMapping(value="/loginCheck")
+    public @ResponseBody User loginCheck(HttpServletRequest req, HttpServletResponse res,
              @RequestParam(value="uname") String uname,
-             @RequestParam(value="pass") String pass) throws IOException {
+             @RequestParam(value="pass") String pass)  {
 
 
-        ArrayList<clientProfile> result = account.loginCheck(uname, pass);
-        clientProfile user = null;
+        Optional<User> result = account.loginCheck(uname, pass);
+        User check = null;
 
 
-        if (result.isEmpty()) {
-            System.out.println("no matching creds");
-        } else { user = result.get(0);}
-        return user;
+        if(result.isPresent()) {check = result.get();}
+        return check;
+
+
+
     }
 
 
-        @RequestMapping(value="/myProfilePage", method = RequestMethod.POST)
-        public @ResponseBody clientProfile renderProfileDetails(HttpServletRequest req, HttpServletResponse res,
+        @PostMapping(value="/myProfilePage")
+        public @ResponseBody User renderProfileDetails(HttpServletRequest req, HttpServletResponse res,
                         @RequestParam(value="ID") int clientID){
 
-            System.out.println("we made the connection on init");
-            clientProfile clientInfo = null;
 
-            Optional<clientProfile> result = account.profileInfoRetrieve(clientID);
+            User clientInfo = null;
+
+            Optional<User> result = account.profileInfoRetrieve(clientID);
 
             if (result.isPresent()) { clientInfo = result.get();}
 
-            else {System.out.println("Error retrieving current user's information");}
+
             
             return clientInfo;
 
@@ -150,13 +144,13 @@ public class banking {
              @RequestParam(value="ssNum") String ssNum,
              @RequestParam(value="uname") String uname,
              @RequestParam(value="pass") String pass,
-             @RequestParam(value="passConfirm") String passConfirm,
-             @RequestParam(value="ID") String ID
-            ) throws IOException {
+             @RequestParam(value="role") String role,
+             @RequestParam(value="ID") String id
+            )  {
 
 
-        clientProfile profile = new clientProfile();
-        profile.setClientId(Integer.parseInt(ID));
+        User profile = new User();
+        profile.setId(Integer.parseInt(id));
         profile.setFname(fname);
         profile.setMiddleInit(midInitial);
         profile.setLname(lname);
@@ -169,29 +163,29 @@ public class banking {
         profile.setSsNum(ssNum);
         profile.setUname(uname);
         profile.setPass(pass);
-        System.out.println(profile);
+        profile.setRole(role);
 
 
 
 
-        if(Objects.equals(pass, passConfirm))
-        {
+
+
         account.addNewAccount(profile);
-        }
-        else if (!pass.equals(passConfirm))  {System.out.println("passwords don't match");}
 
 
 
-        else {System.out.println("Something went wrong");}
+
+
+
 
     }
 
     @RequestMapping(value="/verifyEmail")
-    public @ResponseBody clientProfile verifyEmail(@RequestParam(value="email") String email, HttpServletRequest req, HttpServletResponse res){
+    public @ResponseBody User verifyEmail(@RequestParam(value="email") String email, HttpServletRequest req, HttpServletResponse res){
 
-        Optional<clientProfile> result = account.emailCheck(email);
+        Optional<User> result = account.emailCheck(email);
 
-        clientProfile resultSend = null;
+        User resultSend = null;
 
         if(result.isPresent()) {
             resultSend = result.get();
@@ -200,11 +194,7 @@ public class banking {
 
 
         }
-        else {
 
-
-
-        }
 
         return resultSend;
 
@@ -216,9 +206,9 @@ public class banking {
                                    @RequestParam(value="ID") String ID,
                                    HttpServletRequest req, HttpServletResponse res){
 
-        clientProfile newPasswordChange = null;
+            User newPasswordChange = null;
 
-        Optional<clientProfile> result = account.profileInfoRetrieve(Integer.parseInt(ID));
+        Optional<User> result = account.profileInfoRetrieve(Integer.parseInt(ID));
 
         if(result.isPresent())
         { newPasswordChange = result.get();
@@ -229,13 +219,13 @@ public class banking {
 
         if(Objects.equals(pass, passConfirm))
         {account.addNewAccount(newPasswordChange);
-            System.out.println("on the right track");}
+            }
 
-        else {System.out.println("something is wrong");}
+
 
     }
 
-    @RequestMapping(value="/loanApplication", method = RequestMethod.POST)
+    @PostMapping(value="/loanApplication")
     public void submitLoanApp
             (HttpServletRequest req, HttpServletResponse res,
              @RequestParam(value="fname") String fname,
@@ -255,7 +245,7 @@ public class banking {
              @RequestParam(value="salary") int salary,
              @RequestParam(value="decision") String decision,
              @RequestParam(value="status") String status
-            ) throws IOException {
+            )  {
 
             loanApplication loan = new loanApplication();
 
@@ -284,45 +274,17 @@ public class banking {
 
     }
 
-    @RequestMapping(value="/managerLogin", method = RequestMethod.POST)
-    public @ResponseBody managerCredentials managerLogin(HttpServletRequest req, HttpServletResponse res,
-                           @RequestParam(value="uname") String uname,
-                           @RequestParam(value="pass") String pass) throws IOException {
 
-                Optional<managerCredentials> result = managerFactory.findByUsernameAndPassword(uname,pass);
-                managerCredentials manager = null;
-
-
-                if(result.isPresent()) {
-                    manager = result.get();
-
-
-
-
-
-
-
-
-
-
-                }
-                else {
-
-                    System.out.println("Error");
-                }
-                return manager;
-
-    }
-    @RequestMapping(value="/loanFind",method = RequestMethod.GET)
+    @GetMapping(value="/loanFind")
     public @ResponseBody ArrayList<loanApplication> loanRetrieve(){
 
-        ArrayList<loanApplication> allLoans = applicationFactory.findAll();
-        return allLoans;
+        return applicationFactory.findAll();
+
 
 
     }
 
-    @RequestMapping(value="/loanUpdate",method=RequestMethod.PUT)
+    @PutMapping(value="/loanUpdate")
     public void loanDecision(HttpServletRequest req, HttpServletResponse res,
                              @RequestParam(value="appId") int appId,
                              @RequestParam(value="status") String status,
@@ -344,14 +306,14 @@ public class banking {
     }
 
     @GetMapping("/findbyemail/{email}")
-    public ResponseEntity<clientProfile> findbyemail(@PathVariable("email") String email){
-        clientProfile profile = account.findbyemail(email);
+    public ResponseEntity<User> findbyemail(@PathVariable("email") String email){
+        User profile = account.findbyemail(email);
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
     @GetMapping("/findbyCid/{Client_ID}")
-    public ResponseEntity<clientProfile> findbyemail(@PathVariable("Client_ID") int id){
-        clientProfile profile = account.findByClientId(id);
+    public ResponseEntity<User> findbyemail(@PathVariable("Client_ID") int id){
+        User profile = account.findByClientId(id);
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 

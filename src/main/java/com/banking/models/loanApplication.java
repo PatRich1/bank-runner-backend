@@ -1,13 +1,11 @@
 package com.banking.models;
 
-import com.sun.istack.NotNull;
-import lombok.*;
-import org.hibernate.Hibernate;
-import org.hibernate.annotations.ColumnDefault;
+
+
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
-import java.sql.Date;
+import javax.validation.constraints.NotNull;
+
 import java.util.Objects;
 
 

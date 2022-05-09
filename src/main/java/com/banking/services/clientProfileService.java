@@ -1,13 +1,9 @@
 package com.banking.services;
-
 import com.banking.exception.UserNotFoundException;
-import com.banking.models.clientProfile;
+import com.banking.models.User;
 import com.banking.repositories.clientProfileRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -16,42 +12,42 @@ public class clientProfileService  {
     @Autowired
     private clientProfileRepo profile;
 
-    public void addNewAccount(clientProfile account) {
+    public void addNewAccount(User account) {
 
         profile.save(account);
 
 
     }
 
-    public ArrayList<clientProfile> existingClientCheck(String ssNum) {
-        ArrayList<clientProfile> userCheck;
+    public ArrayList<User> existingClientCheck(String ssNum) {
+        ArrayList<User> userCheck;
 
         userCheck = profile.findByssNum(ssNum);
 
         return userCheck;
     }
 
-    public ArrayList<clientProfile> loginCheck(String uname, String pass) {
+    public Optional<User> loginCheck(String uname, String pass) {
 
-        ArrayList<clientProfile> result;
+        Optional<User> result;
 
         result = profile.findByCreds(uname,pass);
 
         return result;
 
     }
-    public Optional<clientProfile> profileInfoRetrieve(int ID) {
+    public Optional<User> profileInfoRetrieve(int ID) {
 
-        Optional<clientProfile> result;
+        Optional<User> result;
 
         result = profile.findById(ID);
 
         return result;
 
     }
-    public Optional<clientProfile> emailCheck(String email) {
+    public Optional<User> emailCheck(String email) {
 
-        Optional<clientProfile> result;
+        Optional<User> result;
 
         result = profile.findByEmail(email);
 
@@ -59,12 +55,12 @@ public class clientProfileService  {
 
     }
 
-    public clientProfile findbyemail (String email) {
+    public User findbyemail (String email) {
         return profile.findByEmail(email).orElseThrow(()-> new UserNotFoundException("User by email"+ email +"was not found"));
     }
 
-    public clientProfile findByClientId(int id){
-        return profile.findByClientId(id).orElseThrow(()-> new UserNotFoundException("User by id"+ id +"was not found"));
+    public User findByClientId(int id){
+        return profile.findById(id).orElseThrow(()-> new UserNotFoundException("User by id"+ id +"was not found"));
     }
 
 
