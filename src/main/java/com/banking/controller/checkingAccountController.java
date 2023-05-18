@@ -37,6 +37,7 @@ public class checkingAccountController {
         if (id == 0){
             return null;
         }
+
         List<checkingAccountInfo> accounts = checking.findallbyid(id);
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }

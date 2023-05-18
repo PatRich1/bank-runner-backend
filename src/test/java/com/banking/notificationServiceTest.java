@@ -129,6 +129,7 @@ public class notificationServiceTest<NotificationsServiceimpl, NotificationsRepo
 
         assertIterableEquals(MOCK_ALL_NOTIFICATIONS_FOR_CLIENT_1, notificationsList);
         verify(mockitoDao).findByClientId(anyInt());
+
     }
 
 }

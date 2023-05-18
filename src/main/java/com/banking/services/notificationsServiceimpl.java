@@ -37,7 +37,7 @@ public class notificationsServiceimpl implements notificationsService{
 
     @Override
     public notifications get(int id) {
-        return service.findById(id).orElseThrow(()-> new UserNotFoundException("User by id"+ id +"was not found"));
+        return service.findById(id).orElseThrow(()-> new UserNotFoundException("User by id "+ id +"was not found"));
     }
 
     @Override
